@@ -19,9 +19,11 @@ function calc(){
   var rho = dist(lat1, lon1, lat2, lon2);
   var d_km = 6371*rho;
   var d_miles = 3959*rho;
-  var res = 'Point 1: ('+lat1+', '+lon1+') Point 2: ('+lat2+', '+lon2+')<br>';
-  res += 'rho = ' + rho + '<br>Distance = '+d_km+' km, ' + d_miles + ' miles';
+  var res = 'Distance = '+d_km+' km, ' + d_miles + ' miles</div>';
+  var notes = 'Point A: ('+lat1+', '+lon1+') Point B: ('+lat2+', '+lon2+')<br>';
+  notes += 'rho = ' + rho;
   document.getElementById('result').innerHTML = res;
+  document.getElementById('notes').innerHTML = notes;
 }
 function dist(lat1, lon1, lat2, lon2){
   var deg2rad = Math.PI/180.0;
@@ -37,35 +39,36 @@ function dist(lat1, lon1, lat2, lon2){
 <h1>Shortest distance between two points on Earth</h1>
 <form name="gr8c">
         <table><thead><td>Point</td><td>Latitude</td><td width="20"/><td>Longitude</td></thead>
-  <tr><td style="text-align: center">1</td>
+  <tr><td style="text-align: center">A</td>
       <td>
         <input name="lat1"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
         <input name="lat1m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
-        <input name="lat1s" type="text" value="0" size="1" maxlength="2" style="text-align: right">"
+        <input name="lat1s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
       <td/>
       <td>
         <input name="lon1"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
         <input name="lon1m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
-        <input name="lon1s" type="text" value="0" size="1" maxlength="2" style="text-align: right">"
+        <input name="lon1s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
   </tr>
-  <tr><td style="text-align: center">2</td>
+  <tr><td style="text-align: center">B</td>
       <td>
         <input name="lat2"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
         <input name="lat2m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
-        <input name="lat2s" type="text" value="0" size="1" maxlength="2" style="text-align: right">"
+        <input name="lat2s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
       <td/>
       <td>
         <input name="lon2"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
         <input name="lon2m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
-        <input name="lon2s" type="text" value="0" size="1" maxlength="2" style="text-align: right">"
+        <input name="lon2s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
   </tr>
   </table>
 </form>
 <button onclick="calc();">Go!</button>
-<div id="result"></div>
+<div id="result" style="font-weight: bold"></div>
+<div id="notes"></div>
 </body>
 </html>
