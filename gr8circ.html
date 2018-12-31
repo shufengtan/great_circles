@@ -4,7 +4,7 @@
 function get_deg(d, m, s){
   var deg=(d == "") ? 0 : parseFloat(d);
   var f=(m == "" ? 0 : parseFloat(m)/60.0) + (s == "" ? 0 : parseFloat(s)/3600.0);
-  if (deg<0){
+  if (d.match(/-/)){
     deg = deg - f;
   } else {
     deg = deg + f;
@@ -17,11 +17,13 @@ function calc(){
   var lat2 = get_deg(gr8c.lat2.value, gr8c.lat2m.value, gr8c.lat2s.value);
   var lon2 = get_deg(gr8c.lon2.value, gr8c.lon2m.value, gr8c.lon2s.value);
   var rho = dist(lat1, lon1, lat2, lon2);
+  var rho_deg = rho*180.0/Math.PI;
+  var d_nm = 60*rho_deg;
   var d_km = 6371*rho;
   var d_miles = 3959*rho;
-  var res = 'Distance = '+d_km+' km, ' + d_miles + ' miles</div>';
+  var res = 'Distance = ' + d_nm + ' nm, ' + d_km + ' km, ' + d_miles + ' miles';
   var notes = 'Point A: ('+lat1+', '+lon1+') Point B: ('+lat2+', '+lon2+')<br>';
-  notes += 'rho = ' + rho;
+  notes += '&#x3C1; = ' + rho + ' rad, ' + rho_deg + '&deg;';
   document.getElementById('result').innerHTML = res;
   document.getElementById('notes').innerHTML = notes;
 }
