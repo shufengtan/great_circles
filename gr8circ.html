@@ -11,19 +11,104 @@ function get_deg(d, m, s){
   }
   return deg;
 }
+function invalid_d(deg){
+  return deg.search(/[^\d\.\-]/) >= 0;
+}
+function invalid_m_s(m_s){
+  return m_s.search(/[^\d\.]/) >= 0;
+}
+function invalid_lat(lat){
+  return (lat > 90 || lat < -90);
+}
+function invalid_lon(lon){
+  return (lon > 180 || lon < -180);
+}
 function calc(){
-  var lat1 = get_deg(gr8c.lat1.value, gr8c.lat1m.value, gr8c.lat1s.value);
-  var lon1 = get_deg(gr8c.lon1.value, gr8c.lon1m.value, gr8c.lon1s.value);
-  var lat2 = get_deg(gr8c.lat2.value, gr8c.lat2m.value, gr8c.lat2s.value);
-  var lon2 = get_deg(gr8c.lon2.value, gr8c.lon2m.value, gr8c.lon2s.value);
+  var lat1d = gr8c.lat1.value;
+  var lat1m = gr8c.lat1m.value;
+  var lat1s = gr8c.lat1s.value;
+  var lon1d = gr8c.lon1.value;
+  var lon1m = gr8c.lon1m.value;
+  var lon1s = gr8c.lon1s.value;
+  var lat2d = gr8c.lat2.value;
+  var lat2m = gr8c.lat2m.value;
+  var lat2s = gr8c.lat2s.value;
+  var lon2d = gr8c.lon2.value;
+  var lon2m = gr8c.lon2m.value;
+  var lon2s = gr8c.lon2s.value;
+  var err = "";
+  if(invalid_d(lat1d)){
+    err += "Invalid point A latitude degree value: " + lat1d + "\n";
+  }
+  if(invalid_m_s(lat1m)){
+    err += "Invalid point A latitude minute value: " + lat1m + "\n";
+  }
+  if(invalid_m_s(lat1s)){
+    err += "Invalid point A latitude second value: " + lat1s + "\n";
+  }
+  if(invalid_d(lon1d)){
+    err += "Invalid point A longitude degree value: " + lon1d + "\n";
+  }
+  if(invalid_m_s(lon1m)){
+    err += "Invalid point A longitude minute value: " + lon1m + "\n";
+  }
+  if(invalid_m_s(lon1s)){
+    err += "Invalid point A longitude second value: " + lon1s + "\n";
+  }
+  if(invalid_d(lat2d)){
+    err += "Invalid point B latitude degree value: " + lat2d + "\n";
+  }
+  if(invalid_m_s(lat2m)){
+    err += "Invalid point B latitude minute value: " + lat2m + "\n";
+  }
+  if(invalid_m_s(lat2s)){
+    err += "Invalid point B latitude second value: " + lat2s + "\n";
+  }
+  if(invalid_d(lon2d)){
+    err += "Invalid point B longitude degree value: " + lon2d + "\n";
+  }
+  if(invalid_m_s(lon2m)){
+    err += "Invalid point B longitude minute value: " + lon2m + "\n";
+  }
+  if(invalid_m_s(lon2s)){
+    err += "Invalid point B longitude second value: " + lon2s + "\n";
+  }
+  if(err.length>0){
+    alert(err);
+    document.getElementById('result').innerHTML = "";
+    document.getElementById('notes').innerHTML = "";
+    return;
+  }
+  var lat1 = get_deg(lat1d, lat1m, lat1s);
+  var lon1 = get_deg(lon1d, lon1m, lon1s);
+  var lat2 = get_deg(lat2d, lat2m, lat2s);
+  var lon2 = get_deg(lon2d, lon2m, lon2s);
+  if(invalid_lat(lat1)){
+    err += "Invalid point A latitude: " + lat1 + "\n";
+  }
+  if(invalid_lon(lon1)){
+    err += "Invalid point A longitude: " + lon1 + "\n";
+  }
+  if(invalid_lat(lat2)){
+    err += "Invalid point B latitude: " + lat2 + "\n";
+  }
+  if(invalid_lon(lon2)){
+    err += "Invalid point B longitude: " + lon2 + "\n";
+  }
+  if(err.length>0){
+    alert(err);
+    document.getElementById('result').innerHTML = "";
+    document.getElementById('notes').innerHTML = "";
+    return;
+  }
   var rho = dist(lat1, lon1, lat2, lon2);
   var rho_deg = rho*180.0/Math.PI;
   var d_nm = 60*rho_deg;
   var d_km = 6371*rho;
   var d_miles = 3959*rho;
   var res = 'Distance = ' + d_nm + ' nm, ' + d_km + ' km, ' + d_miles + ' miles';
-  var notes = 'Point A: ('+lat1+', '+lon1+') Point B: ('+lat2+', '+lon2+')<br>';
-  notes += '&#x3C1; = ' + rho + ' rad, ' + rho_deg + '&deg;';
+  var notes = 'Point A: ('+lat1+', '+lon1+')<br>Point B: ('+lat2+', '+lon2+')<br>';
+  notes += '&#x3C1; = ' + rho + ' rad or ' + rho_deg + '&deg;';
   document.getElementById('result').innerHTML = res;
   document.getElementById('notes').innerHTML = notes;
 }
