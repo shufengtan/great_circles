@@ -23,6 +23,10 @@ function invalid_lat(lat){
 function invalid_lon(lon){
   return (lon > 180 || lon < -180);
 }
+function round_f(f, n){
+  var x = parseInt("1" + "0".repeat(n));
+  return Math.round(f*x)/x;
+}
 function calc(){
   var lat1d = gr8c.lat1.value;
   var lat1m = gr8c.lat1m.value;
@@ -101,14 +105,16 @@ function calc(){
     document.getElementById('notes').innerHTML = "";
     return;
   }
+  var radius_km = parseFloat(gr8c.radius_km.value);
+  var radius_mi = parseFloat(gr8c.radius_mi.value);
   var rho = dist(lat1, lon1, lat2, lon2);
   var rho_deg = rho*180.0/Math.PI;
-  var d_nm = 60*rho_deg;
-  var d_km = 6371*rho;
-  var d_miles = 3959*rho;
-  var res = 'Distance = ' + d_nm + ' nm, ' + d_km + ' km, ' + d_miles + ' miles';
-  var notes = 'Point A: ('+lat1+', '+lon1+')<br>Point B: ('+lat2+', '+lon2+')<br>';
-  notes += '&#x3C1; = ' + rho + ' rad or ' + rho_deg + '&deg;';
+  var d_nm = round_f(60*rho_deg, 3);
+  var d_km = round_f(radius_km*rho, 3);
+  var d_miles = round_f(radius_mi*rho, 3);
+  var res = '<br>Distance = ' + d_nm + ' nm, ' + d_km + ' km, ' + d_miles + ' miles';
+  var notes = '<hr>Point A: ('+round_f(lat1, 9)+', '+round_f(lon1, 9)+')<br>Point B: ('+round_f(lat2, 9)+', '+round_f(lon2, 9)+')<br>';
+  notes += '&#x3C1; = ' + round_f(rho, 9) + ' rad or ' + round_f(rho_deg, 9) + '&deg;';
   document.getElementById('result').innerHTML = res;
   document.getElementById('notes').innerHTML = notes;
 }
@@ -125,36 +131,41 @@ function dist(lat1, lon1, lat2, lon2){
 <body>
 <h1>Shortest distance between two points on Earth</h1>
 <form name="gr8c">
-        <table><thead><td>Point</td><td>Latitude</td><td width="20"/><td>Longitude</td></thead>
+        <table><thead><td>Point&nbsp;&nbsp;&nbsp;</td><td>Latitude</td><td>&nbsp;&nbsp;</td><td>Longitude</td></thead>
   <tr><td style="text-align: center">A</td>
       <td>
         <input name="lat1"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
-        <input name="lat1m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
+        <input name="lat1m" type="text" value="0" size="1" maxlength="7" style="text-align: right">'
         <input name="lat1s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
       <td/>
       <td>
         <input name="lon1"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
-        <input name="lon1m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
+        <input name="lon1m" type="text" value="0" size="1" maxlength="7" style="text-align: right">'
         <input name="lon1s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
   </tr>
   <tr><td style="text-align: center">B</td>
       <td>
         <input name="lat2"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
-        <input name="lat2m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
+        <input name="lat2m" type="text" value="0" size="1" maxlength="7" style="text-align: right">'
         <input name="lat2s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
       <td/>
       <td>
         <input name="lon2"  type="text" value="0" size="6" maxlength="10" style="text-align: right">&deg;
-        <input name="lon2m" type="text" value="0" size="1" maxlength="2" style="text-align: right">'
+        <input name="lon2m" type="text" value="0" size="1" maxlength="7" style="text-align: right">'
         <input name="lon2s" type="text" value="0" size="3" maxlength="7" style="text-align: right">"
       </td>
   </tr>
-  </table>
+</table>
+<br>
+<a href="https://en.wikipedia.org/wiki/Earth_radius#Mean_radius">Earth radius</a>:
+<input name="radius_km" value="6371.0088" size="6" maxlength="6" style="text-align: right"> km,
+<input name="radius_mi" value="3958.7613" size="6" maxlength="6" style="text-align: right"> miles
 </form>
 <button onclick="calc();">Go!</button>
+<br>
 <div id="result" style="font-weight: bold"></div>
 <div id="notes"></div>
 </body>
